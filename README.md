@@ -19,3 +19,8 @@
 - user see list of item card as content of main page
 - card contain item image, item title, item description and cart logo
 - user click cart logo and the item is added to cart
+
+### cart page
+
+- user see form to fill up credential
+-

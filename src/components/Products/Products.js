@@ -1,4 +1,4 @@
-import { Grid, Toolbar } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React from "react";
 import useFetch from "../../hooks/useFetch";
 import Product from "./Product/Product";
@@ -10,7 +10,6 @@ const Products = () => {
 
   return (
     <main className={classes.root}>
-      <Toolbar />
       <Grid
         container
         spacing={2}

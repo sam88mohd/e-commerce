@@ -13,4 +13,10 @@ describe("<Navbar />", () => {
     const navbarTitle = screen.getByText(/Commerce/i);
     expect(navbarTitle).toBeInTheDocument();
   });
+
+  it("Navbar should contain a shoppping cart button", () => {
+    render(<Navbar />);
+    const shoppingCartButton = screen.getByRole("button");
+    expect(shoppingCartButton).toBeInTheDocument();
+  });
 });
