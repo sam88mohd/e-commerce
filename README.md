@@ -29,3 +29,6 @@
 - user see list of item available in cart with quantity and price
 - user see subtotal price all the items
 - user see empty cart button and check out button
+- user can click button to add, deduct quantity and remove the item in cart
+- user can click empty cart button to clear all item in cart
+- user can click check out button to proceed to payment page
