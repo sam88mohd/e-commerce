@@ -10,6 +10,11 @@ const useFetchCart = () => {
     setCart(item.cart);
   };
 
+  const handleEmptyCart = async () => {
+    const item = await commerce.cart.empty();
+    setCart(item.cart);
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -19,8 +24,8 @@ const useFetchCart = () => {
         setError(err);
       }
     })();
-  }, [setCart]);
-  return { cart, error, handleAddToCart };
+  }, [setCart, handleEmptyCart, handleAddToCart]);
+  return { cart, error, handleAddToCart, handleEmptyCart };
 };
 
 export default useFetchCart;

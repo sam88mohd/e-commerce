@@ -1,6 +1,9 @@
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles((theme) => ({
+  root: {
+    paddingBottom: 50,
+  },
   title: {
     marginTop: "5%",
   },
@@ -21,5 +24,9 @@ export default makeStyles((theme) => ({
     marginTop: "10%",
     width: "100%",
     justifyContent: "space-between",
+  },
+  link: {
+    marginLeft: theme.spacing(1),
+    textDecoration: "none",
   },
 }));

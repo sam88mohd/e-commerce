@@ -1,9 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
 export default makeStyles(() => ({
-  root: {
-    maxWidth: "100%",
-  },
   media: {
     height: 0,
     paddingTop: "56.25%",
@@ -13,7 +10,10 @@ export default makeStyles(() => ({
     justifyContent: "space-between",
   },
   cardActions: {
+    justifyContent: "space-between",
+  },
+  button: {
     display: "flex",
-    justifyContent: "flex-end",
+    alignItems: "center",
   },
 }));
