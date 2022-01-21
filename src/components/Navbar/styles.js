@@ -19,6 +19,7 @@ export default makeStyles((theme) => ({
   },
   image: {
     marginRight: "10px",
+    cursor: "pointer",
   },
   grow: {
     flexGrow: 1,

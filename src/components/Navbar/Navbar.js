@@ -7,11 +7,13 @@ import {
 } from "@material-ui/core";
 import { ShoppingCart } from "@material-ui/icons";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import useStyles from "./styles";
 
-const Navbar = () => {
+const Navbar = ({ totalItems }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   return (
     <div>
       <AppBar position="static" color="inherit" className={classes.appBar}>
@@ -22,12 +24,17 @@ const Navbar = () => {
               alt="logo"
               className={classes.image}
               height="25px"
+              onClick={() => navigate("/")}
             />
             Commerce.js
           </Typography>
           <div className={classes.grow}></div>
-          <IconButton aria-label="show cart items" color="inherit">
-            <Badge badgeContent={2} color="secondary">
+          <IconButton
+            aria-label="show cart items"
+            color="inherit"
+            onClick={() => navigate("/cart")}
+          >
+            <Badge badgeContent={totalItems} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>

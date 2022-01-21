@@ -10,7 +10,7 @@ import { AddShoppingCart } from "@material-ui/icons";
 import React from "react";
 import useStyles from "./styles";
 
-const Product = ({ product }) => {
+const Product = ({ product, handleAddToCart }) => {
   const classes = useStyles();
   const noImageLink =
     "https://upload.wikimedia.org/wikipedia/commons/1/15/No_image_available_600_x_450.svg";
@@ -38,7 +38,10 @@ const Product = ({ product }) => {
         ></Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <IconButton aria-label="Add to Cart">
+        <IconButton
+          aria-label="Add to Cart"
+          onClick={() => handleAddToCart(product.id, 1)}
+        >
           <AddShoppingCart />
         </IconButton>
       </CardActions>

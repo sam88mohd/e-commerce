@@ -1,11 +1,9 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import useFetch from "../../hooks/useFetch";
 import Product from "./Product/Product";
 import useStyles from "./styles";
 
-const Products = () => {
-  const { items: products } = useFetch();
+const Products = ({ products, handleAddToCart }) => {
   const classes = useStyles();
 
   return (
@@ -19,7 +17,7 @@ const Products = () => {
         {products &&
           products.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-              <Product product={product} />
+              <Product product={product} handleAddToCart={handleAddToCart} />
             </Grid>
           ))}
       </Grid>
