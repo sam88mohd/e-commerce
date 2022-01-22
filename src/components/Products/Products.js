@@ -15,8 +15,16 @@ const Products = ({ products, handleAddToCart }) => {
         data-testid="grid-container"
       >
         {products &&
-          products.map((product) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+          products.map((product, index) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              key={product.id}
+              data-testid={`item-${index}`}
+            >
               <Product product={product} handleAddToCart={handleAddToCart} />
             </Grid>
           ))}
