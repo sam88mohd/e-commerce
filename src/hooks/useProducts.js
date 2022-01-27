@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { commerce } from "../lib/commerce";
 
-const useFetchProducts = () => {
+const useProducts = () => {
   const [items, setItems] = useState([]);
   const [error, setError] = useState({});
 
@@ -19,4 +19,4 @@ const useFetchProducts = () => {
   return { items, error };
 };
 
-export default useFetchProducts;
+export default useProducts;

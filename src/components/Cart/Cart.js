@@ -3,11 +3,14 @@ import React from "react";
 import CartItem from "./CartItem/CartItem";
 import useStyles from "./styles";
 import { Link as LinkDom } from "react-router-dom";
-import useFetchCart from "../../hooks/useFetchCart";
 
-const Cart = ({ cart }) => {
+const Cart = ({
+  cart,
+  handleRemoveItemInCart,
+  handleEmptyCart,
+  handleUpdateItemInCart,
+}) => {
   const classes = useStyles();
-  const { handleEmptyCart } = useFetchCart();
 
   const EmptyCart = () => {
     return (
@@ -26,7 +29,11 @@ const Cart = ({ cart }) => {
         <Grid container spacing={3}>
           {cart.line_items.map((item) => (
             <Grid item key={item.id} xs={12} sm={4}>
-              <CartItem item={item} />
+              <CartItem
+                item={item}
+                handleRemoveItemInCart={handleRemoveItemInCart}
+                handleUpdateItemInCart={handleUpdateItemInCart}
+              />
             </Grid>
           ))}
           <div className={classes.cardDetails}>
@@ -45,6 +52,8 @@ const Cart = ({ cart }) => {
                 Empty Cart
               </Button>
               <Button
+                component={LinkDom}
+                to="/checkout"
                 className={classes.checkoutButton}
                 size="large"
                 type="button"

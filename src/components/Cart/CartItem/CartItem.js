@@ -6,12 +6,13 @@ import {
   CardMedia,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { noImageLink } from "../../Products/Product/Product.js";
 import useStyles from "./styles.js";
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, handleRemoveItemInCart, handleUpdateItemInCart }) => {
   const classes = useStyles();
+
   return (
     <Card>
       <CardMedia
@@ -25,15 +26,29 @@ const CartItem = ({ item }) => {
       </CardContent>
       <CardActions className={classes.cardActions}>
         <div className={classes.button}>
-          <Button type="button" size="small">
+          <Button
+            disabled={item.quantity === 1}
+            type="button"
+            size="small"
+            onClick={() => handleUpdateItemInCart(item.id, item.quantity - 1)}
+          >
             -
           </Button>
           <Typography>{item.quantity}</Typography>
-          <Button type="button" size="small">
+          <Button
+            type="button"
+            size="small"
+            onClick={() => handleUpdateItemInCart(item.id, item.quantity + 1)}
+          >
             +
           </Button>
         </div>
-        <Button type="button" color="secondary" variant="contained">
+        <Button
+          type="button"
+          color="secondary"
+          variant="contained"
+          onClick={() => handleRemoveItemInCart(item.id)}
+        >
           Remove
         </Button>
       </CardActions>

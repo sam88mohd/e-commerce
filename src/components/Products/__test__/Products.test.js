@@ -3,6 +3,7 @@ import Products from "../Products";
 
 const products = [
   {
+    id: 1,
     name: "shoe",
     image: {
       url: "test.jpg",
@@ -12,6 +13,7 @@ const products = [
     },
   },
   {
+    id: 2,
     name: "shoe",
     image: {
       url: "test.jpg",

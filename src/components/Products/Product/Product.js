@@ -17,7 +17,7 @@ const Product = ({ product, handleAddToCart }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} data-testid="card">
       <CardMedia
         className={classes.media}
         title={product.name}

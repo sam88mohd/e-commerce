@@ -2,16 +2,23 @@ import React from "react";
 import Cart from "./components/Cart/Cart";
 import Navbar from "./components/Navbar/Navbar";
 import Products from "./components/Products/Products";
-import useFetchCart from "./hooks/useFetchCart";
-import useFetchProducts from "./hooks/useFetchProducts";
+import useCart from "./hooks/useCart";
+import useProducts from "./hooks/useProducts";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@material-ui/core";
+import Checkout from "./components/CheckoutForm/Checkout/Checkout";
 
 const theme = createTheme({});
 
 const App = () => {
-  const { items: products } = useFetchProducts();
-  const { cart, handleAddToCart } = useFetchCart();
+  const { items: products } = useProducts();
+  const {
+    cart,
+    handleAddToCart,
+    handleRemoveItemInCart,
+    handleEmptyCart,
+    handleUpdateItemInCart,
+  } = useCart();
 
   return (
     <div>
@@ -29,7 +36,18 @@ const App = () => {
                 />
               }
             />
-            <Route path="/cart" element={<Cart cart={cart} />} />
+            <Route
+              path="/cart"
+              element={
+                <Cart
+                  cart={cart}
+                  handleEmptyCart={handleEmptyCart}
+                  handleRemoveItemInCart={handleRemoveItemInCart}
+                  handleUpdateItemInCart={handleUpdateItemInCart}
+                />
+              }
+            />
+            <Route path="/checkout" element={<Checkout />} />
           </Routes>
         </Router>
       </ThemeProvider>

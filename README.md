@@ -32,3 +32,21 @@
 - user can click button to add, deduct quantity and remove the item in cart
 - user can click empty cart button to clear all item in cart
 - user can click check out button to proceed to payment page
+
+### Checkout page
+
+- user see checkout title
+- user see form to fill for shopping address
+- user see form for payment details
+- shopping address form contains:
+  - first name
+  - last name
+  - address line 1
+  - email
+  - city
+  - zip/ postal code
+  - shipping country - select input
+  - shipping subdivision - select input
+  - shipping option - select input
+- user see button to back to cart
+- user see next button to go to payment details page

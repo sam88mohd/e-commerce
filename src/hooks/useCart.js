@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { commerce } from "../lib/commerce";
 
-const useFetchCart = () => {
+const useCart = () => {
   const [cart, setCart] = useState({});
   const [error, setError] = useState({});
 
@@ -15,6 +15,18 @@ const useFetchCart = () => {
     setCart(item.cart);
   };
 
+  const handleRemoveItemInCart = async (productId) => {
+    const item = await commerce.cart.remove(productId);
+    setCart(item.cart);
+  };
+
+  const handleUpdateItemInCart = async (productId, quantity) => {
+    if (quantity > 0) {
+      const item = await commerce.cart.update(productId, { quantity });
+      setCart(item.cart);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -24,8 +36,15 @@ const useFetchCart = () => {
         setError(err);
       }
     })();
-  }, [setCart, handleEmptyCart, handleAddToCart]);
-  return { cart, error, handleAddToCart, handleEmptyCart };
+  }, [setCart]);
+  return {
+    cart,
+    error,
+    handleAddToCart,
+    handleEmptyCart,
+    handleRemoveItemInCart,
+    handleUpdateItemInCart,
+  };
 };
 
-export default useFetchCart;
+export default useCart;
