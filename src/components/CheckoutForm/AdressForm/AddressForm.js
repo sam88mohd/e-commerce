@@ -11,13 +11,10 @@ import useStyles from "../Checkout/styles";
 import { FormProvider, useForm } from "react-hook-form";
 import CustomInput from "../CustomInput/CustomInput";
 
-const AddressForm = () => {
+const AddressForm = ({ countries }) => {
   const classes = useStyles();
-  const [shippingCountry, setShippingCountry] = useState("Malaysia");
   const [shippingSubdivision, setShippingSubdivision] = useState("Malaysia");
   const [shippingOption, setShippingOption] = useState("Malaysia");
-
-  const countries = ["Malaysia", "Japan", "China"];
 
   const defaultValues = {
     firstName: "",
@@ -26,6 +23,7 @@ const AddressForm = () => {
     email: "",
     city: "",
     zip: "",
+    shippingCountry: "",
   };
   const methods = useForm({ defaultValues }); // assign useForm to methods - can call function in useForm hook
 
@@ -51,17 +49,16 @@ const AddressForm = () => {
                 fullWidth
                 select
                 label="Shipping Country"
-                value={shippingCountry}
-                onChange={(e) => setShippingCountry(e.target.value)}
+                {...methods.register("shippingCountry")}
               >
-                {countries.map((country, index) => (
-                  <MenuItem key={index} value={country}>
-                    {country}
+                {Object.entries(countries).map(([key, value]) => (
+                  <MenuItem key={key} value={key}>
+                    {value}
                   </MenuItem>
                 ))}
               </TextField>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
                 select
@@ -90,7 +87,7 @@ const AddressForm = () => {
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid>
+            </Grid> */}
           </Grid>
           <div className={classes.buttons}>
             <Button type="submit" variant="contained" color="inherit">

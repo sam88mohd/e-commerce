@@ -13,17 +13,18 @@ import Confirmation from "../Confirmation/Confirmation";
 import PaymentForm from "../PaymentForm/PaymentForm";
 import useStyles from "./styles";
 
-const Checkout = () => {
-  // const { checkout } = useCheckout();
+const Checkout = ({ cartId }) => {
+  const { checkout, countries } = useCheckout(cartId);
   const [activeStep, setActiveStep] = useState(0);
 
   const classes = useStyles();
 
   const steps = ["shipping address", "shipping payment"];
+  console.log(countries);
 
-  const Form = () => (activeStep === 0 ? <AddressForm /> : <PaymentForm />);
+  const Form = () =>
+    activeStep === 0 ? <AddressForm countries={countries} /> : <PaymentForm />;
 
-  // console.log(checkout);
   return (
     <main className={classes.root}>
       <Paper className={classes.paper}>
