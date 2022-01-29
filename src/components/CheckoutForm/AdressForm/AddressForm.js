@@ -2,18 +2,20 @@ import {
   Button,
   Grid,
   MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "../Checkout/styles";
 import { FormProvider, useForm } from "react-hook-form";
 import CustomInput from "../CustomInput/CustomInput";
+import { commerce } from "../../../lib/commerce";
 
 const AddressForm = ({ countries }) => {
   const classes = useStyles();
-  const [shippingSubdivision, setShippingSubdivision] = useState("Malaysia");
+  const [shippingCountry, setShippingCountry] = useState("");
+  const [shippingSubdivisions, setShippingSubdivisions] = useState({});
+  const [shippingSubdivision, setShippingSubdivision] = useState("");
   const [shippingOption, setShippingOption] = useState("Malaysia");
 
   const defaultValues = {
@@ -23,9 +25,22 @@ const AddressForm = ({ countries }) => {
     email: "",
     city: "",
     zip: "",
-    shippingCountry: "",
   };
+
   const methods = useForm({ defaultValues }); // assign useForm to methods - can call function in useForm hook
+
+  const retrieveSubdivisions = async (country) => {
+    const { subdivisions } = await commerce.services.localeListSubdivisions(
+      country
+    );
+    setShippingSubdivisions(subdivisions);
+  };
+
+  useEffect(() => {
+    if (shippingCountry) {
+      retrieveSubdivisions(shippingCountry);
+    }
+  }, [shippingCountry]);
 
   const onSubmit = (data) => console.log(data);
 
@@ -49,26 +64,29 @@ const AddressForm = ({ countries }) => {
                 fullWidth
                 select
                 label="Shipping Country"
-                {...methods.register("shippingCountry")}
+                value={shippingCountry}
+                onChange={(e) => setShippingCountry(e.target.value)}
               >
-                {Object.entries(countries).map(([key, value]) => (
-                  <MenuItem key={key} value={key}>
-                    {value}
-                  </MenuItem>
-                ))}
+                {countries &&
+                  Object.entries(countries).map(([key, value]) => (
+                    <MenuItem key={key} value={key}>
+                      {value}
+                    </MenuItem>
+                  ))}
               </TextField>
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
                 select
+                disabled={!shippingCountry}
                 label="Shipping Subdivision"
                 value={shippingSubdivision}
                 onChange={(e) => setShippingSubdivision(e.target.value)}
               >
-                {countries.map((country, index) => (
-                  <MenuItem key={index} value={country}>
-                    {country}
+                {Object.entries(shippingSubdivisions).map(([key, value]) => (
+                  <MenuItem key={key} value={key}>
+                    {value}
                   </MenuItem>
                 ))}
               </TextField>
@@ -77,17 +95,18 @@ const AddressForm = ({ countries }) => {
               <TextField
                 fullWidth
                 select
+                disabled={!shippingSubdivision}
                 label="Shipping Option"
                 value={shippingOption}
                 onChange={(e) => setShippingOption(e.target.value)}
               >
-                {countries.map((country, index) => (
+                {/* {countries.map((country, index) => (
                   <MenuItem key={index} value={country}>
                     {country}
                   </MenuItem>
-                ))}
+                ))} */}
               </TextField>
-            </Grid> */}
+            </Grid>
           </Grid>
           <div className={classes.buttons}>
             <Button type="submit" variant="contained" color="inherit">

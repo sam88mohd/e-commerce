@@ -20,7 +20,6 @@ const Checkout = ({ cartId }) => {
   const classes = useStyles();
 
   const steps = ["shipping address", "shipping payment"];
-  console.log(countries);
 
   const Form = () =>
     activeStep === 0 ? <AddressForm countries={countries} /> : <PaymentForm />;
