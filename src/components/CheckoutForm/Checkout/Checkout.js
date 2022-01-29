@@ -22,7 +22,11 @@ const Checkout = ({ cartId }) => {
   const steps = ["shipping address", "shipping payment"];
 
   const Form = () =>
-    activeStep === 0 ? <AddressForm countries={countries} /> : <PaymentForm />;
+    activeStep === 0 ? (
+      <AddressForm countries={countries} checkout={checkout} />
+    ) : (
+      <PaymentForm />
+    );
 
   return (
     <main className={classes.root}>

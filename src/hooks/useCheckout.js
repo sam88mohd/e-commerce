@@ -8,13 +8,23 @@ const useCheckout = (cartId) => {
 
   // handle async/ await fetch request from chec
   const handleCheckout = async () => {
-    const res = await commerce.checkout.generateToken(cartId, { type: "cart" });
-    setCheckout(res);
+    try {
+      const checkout = await commerce.checkout.generateToken(cartId, {
+        type: "cart",
+      });
+      setCheckout(checkout);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const retrieveCountries = async () => {
-    const { countries } = await commerce.services.localeListCountries();
-    setCountries(countries);
+    try {
+      const { countries } = await commerce.services.localeListCountries();
+      setCountries(countries);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // fetch checkout

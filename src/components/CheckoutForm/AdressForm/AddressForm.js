@@ -11,12 +11,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import CustomInput from "../CustomInput/CustomInput";
 import { commerce } from "../../../lib/commerce";
 
-const AddressForm = ({ countries }) => {
+const AddressForm = ({ countries, checkout }) => {
   const classes = useStyles();
   const [shippingCountry, setShippingCountry] = useState("");
   const [shippingSubdivisions, setShippingSubdivisions] = useState({});
   const [shippingSubdivision, setShippingSubdivision] = useState("");
-  const [shippingOption, setShippingOption] = useState("Malaysia");
+  const [shippingOptions, setShippingOptions] = useState([]);
+  const [shippingOption, setShippingOption] = useState("");
 
   const defaultValues = {
     firstName: "",
@@ -29,16 +30,32 @@ const AddressForm = ({ countries }) => {
 
   const methods = useForm({ defaultValues }); // assign useForm to methods - can call function in useForm hook
 
-  const retrieveSubdivisions = async (country) => {
-    const { subdivisions } = await commerce.services.localeListSubdivisions(
-      country
-    );
-    setShippingSubdivisions(subdivisions);
+  const getSubdivisions = async (country) => {
+    try {
+      const { subdivisions } = await commerce.services.localeListSubdivisions(
+        country
+      );
+      setShippingSubdivisions(subdivisions);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getShippingOptions = async (checkoutId, country) => {
+    try {
+      const res = await commerce.checkout.getShippingOptions(checkoutId, {
+        country: country,
+      });
+      setShippingOptions(res);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     if (shippingCountry) {
-      retrieveSubdivisions(shippingCountry);
+      getSubdivisions(shippingCountry);
+      getShippingOptions(checkout.id, shippingCountry);
     }
   }, [shippingCountry]);
 
@@ -95,16 +112,16 @@ const AddressForm = ({ countries }) => {
               <TextField
                 fullWidth
                 select
-                disabled={!shippingSubdivision}
+                disabled={shippingOptions.length === 0}
                 label="Shipping Option"
                 value={shippingOption}
                 onChange={(e) => setShippingOption(e.target.value)}
               >
-                {/* {countries.map((country, index) => (
-                  <MenuItem key={index} value={country}>
-                    {country}
+                {shippingOptions.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.description}
                   </MenuItem>
-                ))} */}
+                ))}
               </TextField>
             </Grid>
           </Grid>

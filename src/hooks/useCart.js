@@ -6,24 +6,40 @@ const useCart = () => {
   const [error, setError] = useState({});
 
   const handleAddToCart = async (productId, quantity) => {
-    const item = await commerce.cart.add(productId, quantity);
-    setCart(item.cart);
+    try {
+      const item = await commerce.cart.add(productId, quantity);
+      setCart(item.cart);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleEmptyCart = async () => {
-    const item = await commerce.cart.empty();
-    setCart(item.cart);
+    try {
+      const item = await commerce.cart.empty();
+      setCart(item.cart);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleRemoveItemInCart = async (productId) => {
-    const item = await commerce.cart.remove(productId);
-    setCart(item.cart);
+    try {
+      const item = await commerce.cart.remove(productId);
+      setCart(item.cart);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleUpdateItemInCart = async (productId, quantity) => {
     if (quantity > 0) {
-      const item = await commerce.cart.update(productId, { quantity });
-      setCart(item.cart);
+      try {
+        const item = await commerce.cart.update(productId, { quantity });
+        setCart(item.cart);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
