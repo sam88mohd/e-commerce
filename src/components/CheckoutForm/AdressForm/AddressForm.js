@@ -10,8 +10,9 @@ import useStyles from "../Checkout/styles";
 import { FormProvider, useForm } from "react-hook-form";
 import CustomInput from "../CustomInput/CustomInput";
 import { commerce } from "../../../lib/commerce";
+import { Link } from "react-router-dom";
 
-const AddressForm = ({ countries, checkout }) => {
+const AddressForm = ({ countries, checkout, test }) => {
   const classes = useStyles();
   const [shippingCountry, setShippingCountry] = useState("");
   const [shippingSubdivisions, setShippingSubdivisions] = useState({});
@@ -59,7 +60,8 @@ const AddressForm = ({ countries, checkout }) => {
     }
   }, [shippingCountry]);
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) =>
+    test({ ...data, shippingCountry, shippingSubdivision, setShippingOption });
 
   return (
     <>
@@ -119,17 +121,28 @@ const AddressForm = ({ countries, checkout }) => {
               >
                 {shippingOptions.map((option) => (
                   <MenuItem key={option.id} value={option.id}>
-                    {option.description}
+                    {option.description} - {option.price.formatted_with_symbol}
                   </MenuItem>
                 ))}
               </TextField>
             </Grid>
           </Grid>
           <div className={classes.buttons}>
-            <Button type="submit" variant="contained" color="inherit">
+            <Button
+              component={Link}
+              to="/cart"
+              variant="contained"
+              color="inherit"
+              className={classes.button}
+            >
               Back to Cart
             </Button>
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
               Submit
             </Button>
           </div>

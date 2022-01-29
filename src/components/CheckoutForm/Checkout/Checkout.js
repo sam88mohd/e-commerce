@@ -16,14 +16,25 @@ import useStyles from "./styles";
 const Checkout = ({ cartId }) => {
   const { checkout, countries } = useCheckout(cartId);
   const [activeStep, setActiveStep] = useState(0);
+  const [shippingData, setShippingData] = useState({});
 
   const classes = useStyles();
 
   const steps = ["shipping address", "shipping payment"];
 
+  const nextStep = () => setActiveStep((prevStep) => prevStep + 1);
+
+  const test = (data) => {
+    setShippingData(data);
+
+    nextStep();
+  };
+
+  console.log(shippingData);
+
   const Form = () =>
     activeStep === 0 ? (
-      <AddressForm countries={countries} checkout={checkout} />
+      <AddressForm countries={countries} checkout={checkout} test={test} />
     ) : (
       <PaymentForm />
     );
