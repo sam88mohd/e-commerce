@@ -9,6 +9,7 @@ const CustomInput = ({ name, type, label, required }) => {
       <Controller
         control={control}
         name={name}
+        defaultValue=""
         render={({ field }) => (
           <TextField
             {...field}

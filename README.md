@@ -50,3 +50,13 @@
   - shipping option - select input
 - user see button to back to cart
 - user see next button to go to payment details page
+
+### Payment Summary
+
+- user see order summary title
+- user see list of item purchased with price and quantity
+- user see total price
+- user see payment method title
+- user see input for key in card detail
+- user see back button
+- user see pay button with amount to pay

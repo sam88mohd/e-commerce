@@ -23,6 +23,7 @@ const Checkout = ({ cartId }) => {
   const steps = ["shipping address", "shipping payment"];
 
   const nextStep = () => setActiveStep((prevStep) => prevStep + 1);
+  const backStep = () => setActiveStep((prevStep) => prevStep - 1);
 
   const test = (data) => {
     setShippingData(data);
@@ -30,13 +31,11 @@ const Checkout = ({ cartId }) => {
     nextStep();
   };
 
-  console.log(shippingData);
-
   const Form = () =>
     activeStep === 0 ? (
       <AddressForm countries={countries} checkout={checkout} test={test} />
     ) : (
-      <PaymentForm />
+      <PaymentForm backStep={backStep} checkout={checkout} />
     );
 
   return (

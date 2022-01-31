@@ -20,16 +20,7 @@ const AddressForm = ({ countries, checkout, test }) => {
   const [shippingOptions, setShippingOptions] = useState([]);
   const [shippingOption, setShippingOption] = useState("");
 
-  const defaultValues = {
-    firstName: "",
-    lastName: "",
-    address: "",
-    email: "",
-    city: "",
-    zip: "",
-  };
-
-  const methods = useForm({ defaultValues }); // assign useForm to methods - can call function in useForm hook
+  const methods = useForm(); // assign useForm to methods - can call function in useForm hook
 
   const getSubdivisions = async (country) => {
     try {
@@ -61,7 +52,7 @@ const AddressForm = ({ countries, checkout, test }) => {
   }, [shippingCountry]);
 
   const onSubmit = (data) =>
-    test({ ...data, shippingCountry, shippingSubdivision, setShippingOption });
+    test({ ...data, shippingCountry, shippingSubdivision, shippingOption });
 
   return (
     <>
@@ -131,8 +122,7 @@ const AddressForm = ({ countries, checkout, test }) => {
             <Button
               component={Link}
               to="/cart"
-              variant="contained"
-              color="inherit"
+              variant="outlined"
               className={classes.button}
             >
               Back to Cart
@@ -143,7 +133,7 @@ const AddressForm = ({ countries, checkout, test }) => {
               color="primary"
               className={classes.button}
             >
-              Submit
+              Next
             </Button>
           </div>
         </form>
