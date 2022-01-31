@@ -1,33 +1,24 @@
-import { Button, Divider } from "@material-ui/core";
+import { Divider, Typography } from "@material-ui/core";
+import { Elements } from "@stripe/react-stripe-js";
 import React from "react";
-import useStyles from "../Checkout/styles";
 import Review from "../Review/Review";
+import { stripePromise } from "../../../lib/stripe";
+import CardForm from "./CardForm/CardForm";
 
 const PaymentForm = ({ backStep, checkout }) => {
-  const classes = useStyles();
   return (
     <>
       <Review checkout={checkout} />
-
       <Divider />
-
-      <div className={classes.buttons}>
-        <Button
-          variant="outlined"
-          onClick={backStep}
-          className={classes.button}
-        >
-          Back
-        </Button>
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="primary"
-          onClick={backStep}
-        >
-          Pay {checkout.live.subtotal.formatted_with_symbol}
-        </Button>
-      </div>
+      <Typography variant="h6" gutterBottom style={{ margin: "20px 0" }}>
+        Payment Method
+      </Typography>
+      <Elements stripe={stripePromise}>
+        <CardForm
+          backStep={backStep}
+          total={checkout.live.subtotal.formatted_with_symbol}
+        />
+      </Elements>
     </>
   );
 };

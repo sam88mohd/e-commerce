@@ -20,7 +20,16 @@ const AddressForm = ({ countries, checkout, test }) => {
   const [shippingOptions, setShippingOptions] = useState([]);
   const [shippingOption, setShippingOption] = useState("");
 
-  const methods = useForm(); // assign useForm to methods - can call function in useForm hook
+  const defaultValues = {
+    firstName: "",
+    lastName: "",
+    address: "",
+    email: "",
+    city: "",
+    zip: "",
+  };
+
+  const methods = useForm({ defaultValues }); // assign useForm to methods - can call function in useForm hook
 
   const getSubdivisions = async (country) => {
     try {
