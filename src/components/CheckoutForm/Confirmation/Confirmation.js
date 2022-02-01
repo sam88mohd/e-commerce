@@ -1,10 +1,9 @@
-import { Button, CircularProgress, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
-import useStyles from "./styles";
+import Loading from "../../Loading/Loading";
 
 const Confirmation = ({ order }) => {
-  const classes = useStyles();
   return order.customer ? (
     <>
       <Typography variant="h5" gutterBottom>
@@ -15,9 +14,7 @@ const Confirmation = ({ order }) => {
       </Button>
     </>
   ) : (
-    <div className={classes.spinner}>
-      <CircularProgress />
-    </div>
+    <Loading />
   );
 };
 

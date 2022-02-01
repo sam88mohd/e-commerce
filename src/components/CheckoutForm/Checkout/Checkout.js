@@ -1,6 +1,7 @@
 import { Paper, Step, StepLabel, Stepper, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { commerce } from "../../../lib/commerce";
+import Loading from "../../Loading/Loading";
 import AddressForm from "../AdressForm/AddressForm";
 import Confirmation from "../Confirmation/Confirmation";
 import PaymentForm from "../PaymentForm/PaymentForm";
@@ -8,6 +9,7 @@ import useStyles from "./styles";
 
 const Checkout = ({ cartId, captureOrder, order }) => {
   const [checkout, setCheckout] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
   const [shippingData, setShippingData] = useState({});
 
@@ -19,10 +21,15 @@ const Checkout = ({ cartId, captureOrder, order }) => {
         type: "cart",
       });
       setCheckout(checkout);
+      setIsLoading(false);
     } catch (err) {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    createCheckoutToken(cartId);
+  }, [cartId]);
 
   const steps = ["shipping address", "shipping payment"];
 
@@ -37,7 +44,7 @@ const Checkout = ({ cartId, captureOrder, order }) => {
 
   const Form = () =>
     activeStep === 0 ? (
-      <AddressForm checkout={checkout} test={test} />
+      <AddressForm checkout={checkout} test={test} isLoading={isLoading} />
     ) : (
       <PaymentForm
         backStep={backStep}
@@ -48,11 +55,7 @@ const Checkout = ({ cartId, captureOrder, order }) => {
       />
     );
 
-  useEffect(() => {
-    createCheckoutToken(cartId);
-  }, []);
-
-  return (
+  return !isLoading ? (
     <main className={classes.root}>
       <Paper className={classes.paper}>
         <Typography variant="h4" align="center">
@@ -76,6 +79,8 @@ const Checkout = ({ cartId, captureOrder, order }) => {
         )}
       </Paper>
     </main>
+  ) : (
+    <Loading />
   );
 };
 

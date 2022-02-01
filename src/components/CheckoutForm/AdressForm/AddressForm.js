@@ -11,8 +11,9 @@ import { FormProvider, useForm } from "react-hook-form";
 import CustomInput from "../CustomInput/CustomInput";
 import { commerce } from "../../../lib/commerce";
 import { Link } from "react-router-dom";
+import Loading from "../../Loading/Loading";
 
-const AddressForm = ({ checkout, test }) => {
+const AddressForm = ({ checkout, test, isLoading }) => {
   const classes = useStyles();
   const [shippingCountries, setShippingCountries] = useState({});
   const [shippingCountry, setShippingCountry] = useState("");
@@ -85,7 +86,7 @@ const AddressForm = ({ checkout, test }) => {
 
   useEffect(() => {
     getShippingCountries(checkout.id);
-  }, []);
+  }, [checkout.id]);
 
   useEffect(() => {
     if (shippingCountry) getSubdivisions(shippingCountry);
@@ -94,12 +95,12 @@ const AddressForm = ({ checkout, test }) => {
   useEffect(() => {
     if (shippingSubdivision)
       getShippingOptions(checkout.id, shippingCountry, shippingSubdivision);
-  }, [shippingSubdivision]);
+  }, [shippingSubdivision, checkout.id, shippingCountry]);
 
   const onSubmit = (data) =>
     test({ ...data, shippingCountry, shippingSubdivision, shippingOption });
 
-  return (
+  return !isLoading ? (
     <>
       <Typography variant="h6" gutterBottom>
         Shipping Address
@@ -181,6 +182,8 @@ const AddressForm = ({ checkout, test }) => {
         </form>
       </FormProvider>
     </>
+  ) : (
+    <Loading />
   );
 };
 
