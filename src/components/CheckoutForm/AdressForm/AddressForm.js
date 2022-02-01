@@ -12,8 +12,9 @@ import CustomInput from "../CustomInput/CustomInput";
 import { commerce } from "../../../lib/commerce";
 import { Link } from "react-router-dom";
 
-const AddressForm = ({ countries, checkout, test }) => {
+const AddressForm = ({ checkout, test }) => {
   const classes = useStyles();
+  const [shippingCountries, setShippingCountries] = useState({});
   const [shippingCountry, setShippingCountry] = useState("");
   const [shippingSubdivisions, setShippingSubdivisions] = useState({});
   const [shippingSubdivision, setShippingSubdivision] = useState("");
@@ -31,34 +32,69 @@ const AddressForm = ({ countries, checkout, test }) => {
 
   const methods = useForm({ defaultValues }); // assign useForm to methods - can call function in useForm hook
 
+  const countries = Object.entries(shippingCountries).map(([code, name]) => ({
+    id: code,
+    label: name,
+  }));
+
+  const getShippingCountries = async (checkoutId) => {
+    try {
+      const { countries } = await commerce.services.localeListShippingCountries(
+        checkoutId
+      );
+      setShippingCountries(countries);
+      setShippingCountry(Object.keys(countries)[0]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const subdivisions = Object.entries(shippingSubdivisions).map(
+    ([code, name]) => ({ id: code, label: name })
+  );
+
   const getSubdivisions = async (country) => {
     try {
       const { subdivisions } = await commerce.services.localeListSubdivisions(
         country
       );
       setShippingSubdivisions(subdivisions);
+      setShippingSubdivision(Object.keys(subdivisions)[0]);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const getShippingOptions = async (checkoutId, country) => {
+  const options = shippingOptions.map((option) => ({
+    id: option.id,
+    label: `${option.description} - (${option.price.formatted_with_symbol})`,
+  }));
+
+  const getShippingOptions = async (checkoutId, country, subdivision) => {
     try {
       const res = await commerce.checkout.getShippingOptions(checkoutId, {
         country: country,
+        region: subdivision,
       });
       setShippingOptions(res);
+      setShippingOption(res[0].id);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    if (shippingCountry) {
-      getSubdivisions(shippingCountry);
-      getShippingOptions(checkout.id, shippingCountry);
-    }
+    getShippingCountries(checkout.id);
+  }, []);
+
+  useEffect(() => {
+    if (shippingCountry) getSubdivisions(shippingCountry);
   }, [shippingCountry]);
+
+  useEffect(() => {
+    if (shippingSubdivision)
+      getShippingOptions(checkout.id, shippingCountry, shippingSubdivision);
+  }, [shippingSubdivision]);
 
   const onSubmit = (data) =>
     test({ ...data, shippingCountry, shippingSubdivision, shippingOption });
@@ -86,26 +122,9 @@ const AddressForm = ({ countries, checkout, test }) => {
                 value={shippingCountry}
                 onChange={(e) => setShippingCountry(e.target.value)}
               >
-                {countries &&
-                  Object.entries(countries).map(([key, value]) => (
-                    <MenuItem key={key} value={key}>
-                      {value}
-                    </MenuItem>
-                  ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                select
-                disabled={!shippingCountry}
-                label="Shipping Subdivision"
-                value={shippingSubdivision}
-                onChange={(e) => setShippingSubdivision(e.target.value)}
-              >
-                {Object.entries(shippingSubdivisions).map(([key, value]) => (
-                  <MenuItem key={key} value={key}>
-                    {value}
+                {countries.map((country) => (
+                  <MenuItem key={country.id} value={country.id}>
+                    {country.label}
                   </MenuItem>
                 ))}
               </TextField>
@@ -114,14 +133,28 @@ const AddressForm = ({ countries, checkout, test }) => {
               <TextField
                 fullWidth
                 select
-                disabled={shippingOptions.length === 0}
+                label="Shipping Subdivision"
+                value={shippingSubdivision}
+                onChange={(e) => setShippingSubdivision(e.target.value)}
+              >
+                {subdivisions.map((subdivision) => (
+                  <MenuItem key={subdivision.id} value={subdivision.id}>
+                    {subdivision.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                select
                 label="Shipping Option"
                 value={shippingOption}
                 onChange={(e) => setShippingOption(e.target.value)}
               >
-                {shippingOptions.map((option) => (
+                {options.map((option) => (
                   <MenuItem key={option.id} value={option.id}>
-                    {option.description} - {option.price.formatted_with_symbol}
+                    {option.label}
                   </MenuItem>
                 ))}
               </TextField>

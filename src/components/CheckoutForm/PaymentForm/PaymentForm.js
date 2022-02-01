@@ -5,7 +5,13 @@ import Review from "../Review/Review";
 import { stripePromise } from "../../../lib/stripe";
 import CardForm from "./CardForm/CardForm";
 
-const PaymentForm = ({ backStep, checkout }) => {
+const PaymentForm = ({
+  backStep,
+  checkout,
+  shippingData,
+  captureOrder,
+  nextStep,
+}) => {
   return (
     <>
       <Review checkout={checkout} />
@@ -17,6 +23,10 @@ const PaymentForm = ({ backStep, checkout }) => {
         <CardForm
           backStep={backStep}
           total={checkout.live.subtotal.formatted_with_symbol}
+          checkout={checkout}
+          shippingData={shippingData}
+          captureOrder={captureOrder}
+          nextStep={nextStep}
         />
       </Elements>
     </>

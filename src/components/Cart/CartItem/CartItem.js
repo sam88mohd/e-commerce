@@ -6,7 +6,7 @@ import {
   CardMedia,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { noImageLink } from "../../Products/Product/Product.js";
 import useStyles from "./styles.js";
 
@@ -16,7 +16,7 @@ const CartItem = ({ item, handleRemoveItemInCart, handleUpdateItemInCart }) => {
   return (
     <Card>
       <CardMedia
-        image={item.media.source ? item.media.source : noImageLink}
+        image={item.image ? item.image.url : noImageLink}
         title={item.name}
         className={classes.media}
       />

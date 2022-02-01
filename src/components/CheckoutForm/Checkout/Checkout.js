@@ -1,24 +1,28 @@
-import {
-  Button,
-  Paper,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
-} from "@material-ui/core";
-import React, { useState } from "react";
-import useCheckout from "../../../hooks/useCheckout";
+import { Paper, Step, StepLabel, Stepper, Typography } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { commerce } from "../../../lib/commerce";
 import AddressForm from "../AdressForm/AddressForm";
 import Confirmation from "../Confirmation/Confirmation";
 import PaymentForm from "../PaymentForm/PaymentForm";
 import useStyles from "./styles";
 
-const Checkout = ({ cartId }) => {
-  const { checkout, countries } = useCheckout(cartId);
+const Checkout = ({ cartId, captureOrder, order }) => {
+  const [checkout, setCheckout] = useState({});
   const [activeStep, setActiveStep] = useState(0);
   const [shippingData, setShippingData] = useState({});
 
   const classes = useStyles();
+
+  const createCheckoutToken = async (cartId) => {
+    try {
+      const checkout = await commerce.checkout.generateToken(cartId, {
+        type: "cart",
+      });
+      setCheckout(checkout);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const steps = ["shipping address", "shipping payment"];
 
@@ -33,10 +37,20 @@ const Checkout = ({ cartId }) => {
 
   const Form = () =>
     activeStep === 0 ? (
-      <AddressForm countries={countries} checkout={checkout} test={test} />
+      <AddressForm checkout={checkout} test={test} />
     ) : (
-      <PaymentForm backStep={backStep} checkout={checkout} />
+      <PaymentForm
+        backStep={backStep}
+        checkout={checkout}
+        shippingData={shippingData}
+        captureOrder={captureOrder}
+        nextStep={nextStep}
+      />
     );
+
+  useEffect(() => {
+    createCheckoutToken(cartId);
+  }, []);
 
   return (
     <main className={classes.root}>
@@ -55,7 +69,11 @@ const Checkout = ({ cartId }) => {
             </Step>
           ))}
         </Stepper>
-        {activeStep === steps.length ? <Confirmation /> : <Form />}
+        {activeStep === steps.length ? (
+          <Confirmation order={order} />
+        ) : (
+          <Form />
+        )}
       </Paper>
     </main>
   );

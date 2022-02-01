@@ -3,7 +3,14 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React from "react";
 import useStyles from "../../Checkout/styles";
 
-const CardForm = ({ total, backStep }) => {
+const CardForm = ({
+  total,
+  backStep,
+  checkout,
+  shippingData,
+  captureOrder,
+  nextStep,
+}) => {
   const classes = useStyles();
 
   const stripe = useStripe();
@@ -14,14 +21,43 @@ const CardForm = ({ total, backStep }) => {
     if (!stripe || !elements) {
       return;
     }
-    const result = await stripe.confirmPayment({
-      elements,
+
+    const cardElement = elements.getElement(CardElement);
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
     });
 
-    if (result.error) {
-      console.log("error:", result.error.message);
+    if (error) {
+      console.log("error:", error.message);
     } else {
-      console.log(result);
+      const orderData = {
+        line_items: checkout.live.line_items,
+        customer: {
+          firstname: shippingData.firstName,
+          lastname: shippingData.lastName,
+          email: shippingData.email,
+        },
+        shipping: {
+          name: "Primary",
+          street: shippingData.address,
+          town_city: shippingData.city,
+          country_state: shippingData.shippingSubdivision,
+          postal_zip_code: shippingData.zip,
+          country: shippingData.shippingCountry,
+        },
+        fulfillment: { shipping_method: shippingData.shippingOption },
+        payment: {
+          gateway: "stripe",
+          stripe: {
+            payment_method_id: paymentMethod.id,
+          },
+        },
+      };
+
+      captureOrder(checkout.id, orderData);
+
+      nextStep();
     }
   };
 
