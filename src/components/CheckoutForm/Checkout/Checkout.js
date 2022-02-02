@@ -1,5 +1,6 @@
 import { Paper, Step, StepLabel, Stepper, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { commerce } from "../../../lib/commerce";
 import Loading from "../../Loading/Loading";
 import AddressForm from "../AdressForm/AddressForm";
@@ -15,6 +16,8 @@ const Checkout = ({ cartId, captureOrder, order }) => {
 
   const classes = useStyles();
 
+  const navigate = useNavigate();
+
   const createCheckoutToken = async (cartId) => {
     try {
       const checkout = await commerce.checkout.generateToken(cartId, {
@@ -23,7 +26,7 @@ const Checkout = ({ cartId, captureOrder, order }) => {
       setCheckout(checkout);
       setIsLoading(false);
     } catch (err) {
-      console.error(err);
+      navigate("/");
     }
   };
 
